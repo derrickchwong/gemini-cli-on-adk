@@ -37,7 +37,7 @@ def get_project_id():
 project_id = get_project_id()
 os.environ.setdefault("GOOGLE_CLOUD_PROJECT", project_id)
 os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
-os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "True")
+os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "true")
 
 def gemini_cli(task: str, github_url: str) -> str:
     """Executes the Gemini CLI.
@@ -79,7 +79,9 @@ def gemini_cli(task: str, github_url: str) -> str:
         # Construct the gemini command with include-directories
         command = f'gemini -p "{task}" --include-directories "{codebaseDir}"'
 
-        # Execute the command in the specified directory
+        # Execute the command in the specified directory with required environment variable
+        env = os.environ.copy()
+
         result = subprocess.run(
             command,
             shell=True,
@@ -87,6 +89,7 @@ def gemini_cli(task: str, github_url: str) -> str:
             text=True,
             timeout=60,  # Increased timeout for AI processing
             cwd=codebaseDir,
+            env=env,
         )
 
         # Return the stdout directly as the response
