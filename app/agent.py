@@ -13,11 +13,28 @@
 # limitations under the License.
 
 import os
+import requests
 
 import google.auth
 from google.adk.agents import Agent
 
-_, project_id = google.auth.default()
+def get_project_id():
+    """Get project ID from Cloud Run metadata service or fallback to auth."""
+    try:
+        # Try Cloud Run metadata service first
+        metadata_url = "http://metadata.google.internal/computeMetadata/v1/project/project-id"
+        headers = {"Metadata-Flavor": "Google"}
+        response = requests.get(metadata_url, headers=headers, timeout=5)
+        if response.status_code == 200:
+            return response.text
+    except Exception:
+        pass
+
+    # Fallback to google.auth
+    _, project_id = google.auth.default()
+    return project_id
+
+project_id = get_project_id()
 os.environ.setdefault("GOOGLE_CLOUD_PROJECT", project_id)
 os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
 os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "True")
