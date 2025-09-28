@@ -22,7 +22,18 @@ steps:
       - '-t'
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/container/gemini-cli-adk:latest'
       - '.'
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "us-central1-docker.pkg.dev/$PROJECT_ID/container/gemini-cli-adk:latest"
+      ]
 
-# Specify the images to be pushed to the registry
-images:
-  - 'us-central1-docker.pkg.dev/$PROJECT_ID/container/gemini-cli-adk:latest'
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'gemini-cli-adk'
+      - '--image=us-central1-docker.pkg.dev/$PROJECT_ID/container/gemini-cli-adk:latest'
+      - '--region=us-central1'

@@ -77,7 +77,7 @@ def gemini_cli(task: str, github_url: str) -> str:
             print(f"Successfully cloned repository to {codebaseDir}")
 
         # Construct the gemini command with include-directories
-        command = f'gemini -p "{task}" --include-directories "{codebaseDir}"'
+        command = f'gemini -p "{task}"'
 
         # Execute the command in the specified directory with required environment variable
         env = os.environ.copy()
@@ -87,7 +87,7 @@ def gemini_cli(task: str, github_url: str) -> str:
             shell=True,
             capture_output=True,
             text=True,
-            timeout=60,  # Increased timeout for AI processing
+            timeout=600,  # Increased timeout for AI processing
             cwd=codebaseDir,
             env=env,
         )
@@ -99,7 +99,7 @@ def gemini_cli(task: str, github_url: str) -> str:
             return f"Error executing Gemini CLI: {result.stderr}"
 
     except subprocess.TimeoutExpired:
-        return "Gemini CLI command timed out after 60 seconds"
+        return "Gemini CLI command timed out after 600 seconds"
     except Exception as e:
         return f"Failed to execute Gemini CLI: {str(e)}"
 
