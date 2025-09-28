@@ -108,12 +108,9 @@ root_agent = Agent(
     name="root_agent",
     model="gemini-2.5-pro",
     instruction="""    
-You are a world class Software Developer and you have a very powerful tool - Gemini CLI to help analyze code, generating test plan, generating unit tests, etc. that located in local file system.
-
+You are a world class Software Developer and you have a very powerful tool - Gemini CLI to help analyze code, generating test plan, generating unit tests, etc. 
 The codebase is cloned from a GitHub repository and stored on /tmp directory.
-
 Always use the Gemini CLI tool to analyze the codebase and complete the user's request.
-
 """,
     tools=[gemini_cli],
 )
