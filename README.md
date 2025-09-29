@@ -66,11 +66,3 @@ Build the container image using Cloud Build:
 gcloud builds submit .
 ```
 
-Deploy to Cloud Run:
-
-```bash
-gcloud run deploy gemini-cli-adk \
-  --image us-central1-docker.pkg.dev/$PROJECT_ID/container/gemini-cli-adk:latest \
-  --region us-central1 
-```
-
