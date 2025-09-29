@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+substitutions:
+  _REGION: 'us-central1'
+  _REPO_NAME: 'container'
+
 steps:
   # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
@@ -20,13 +24,13 @@ steps:
       - '--build-arg'
       - 'COMMIT_SHA=$COMMIT_SHA'
       - '-t'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/container/gemini-cli-adk:latest'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/gemini-cli-adk:latest'
       - '.'
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
-        "us-central1-docker.pkg.dev/$PROJECT_ID/container/gemini-cli-adk:latest"
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/gemini-cli-adk:latest"
       ]
 
   # Deploy to Cloud Run
@@ -35,5 +39,5 @@ steps:
       - 'run'
       - 'deploy'
       - 'gemini-cli-adk'
-      - '--image=us-central1-docker.pkg.dev/$PROJECT_ID/container/gemini-cli-adk:latest'
-      - '--region=us-central1'
+      - '--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/gemini-cli-adk:latest'
+      - '--region=${_REGION}'

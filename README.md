@@ -63,6 +63,12 @@ The ADK agent is designed to run on Google Cloud Run. It includes a Dockerfile a
 Build the container image using Cloud Build:
 
 ```bash
-gcloud builds submit .
+gcloud builds submit --config cloudbuild.yaml
+```
+
+You can also override the default region and repository name:
+
+```bash
+gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=us-east1,_REPO_NAME=my-repo
 ```
 
