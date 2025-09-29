@@ -66,9 +66,15 @@ Build the container image using Cloud Build:
 gcloud builds submit --config cloudbuild.yaml
 ```
 
-You can also override the default region and repository name:
+You can also override the default substitution variables:
 
 ```bash
-gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=us-east1,_REPO_NAME=my-repo
+gcloud builds submit --config cloudbuild.yaml --substitutions=_REGION=us-east1,_REPO_NAME=my-repo,_SERVICE_NAME=my-service,_IMAGE_TAG=v1.0.0
 ```
+
+Available substitution variables:
+- `_REGION`: Deployment region (default: us-central1)
+- `_REPO_NAME`: Artifact Registry repository name (default: container)
+- `_SERVICE_NAME`: Cloud Run service name (default: gemini-cli-adk)
+- `_IMAGE_TAG`: Docker image tag (default: latest)
 

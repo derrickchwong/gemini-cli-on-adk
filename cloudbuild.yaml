@@ -15,6 +15,8 @@
 substitutions:
   _REGION: 'us-central1'
   _REPO_NAME: 'container'
+  _SERVICE_NAME: 'gemini-cli-adk'
+  _IMAGE_TAG: 'latest'
 
 steps:
   # Build the Docker image
@@ -24,13 +26,13 @@ steps:
       - '--build-arg'
       - 'COMMIT_SHA=$COMMIT_SHA'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/gemini-cli-adk:latest'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:${_IMAGE_TAG}'
       - '.'
   - name: "gcr.io/cloud-builders/docker"
     args:
       [
         "push",
-        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/gemini-cli-adk:latest"
+        "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:${_IMAGE_TAG}"
       ]
 
   # Deploy to Cloud Run
@@ -38,6 +40,6 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'gemini-cli-adk'
-      - '--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/gemini-cli-adk:latest'
+      - '${_SERVICE_NAME}'
+      - '--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/${_SERVICE_NAME}:${_IMAGE_TAG}'
       - '--region=${_REGION}'
